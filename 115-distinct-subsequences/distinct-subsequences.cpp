@@ -4,27 +4,18 @@ public:
         int n = s.size();
         int m = t.size();
 
-        vector<vector<unsigned long long>> dp(n + 1,
-            vector<unsigned long long>(m + 1, 0));
-
-        // Empty t can always be formed in 1 way
-        for (int i = 0; i <= n; i++) {
-            dp[i][0] = 1;
-        }
+        vector<unsigned long long> dp(m + 1, 0);
+        dp[0] = 1;
 
         for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-
-                // Don't take s[i-1]
-                dp[i][j] = dp[i - 1][j];
-
-                // Take s[i-1] if it matches t[j-1]
+            // Go backwards so dp[j-1] is still from the previous row
+            for (int j = m; j >= 1; j--) {
                 if (s[i - 1] == t[j - 1]) {
-                    dp[i][j] += dp[i - 1][j - 1];
+                    dp[j] += dp[j - 1];
                 }
             }
         }
 
-        return dp[n][m];
+        return dp[m];
     }
 };
